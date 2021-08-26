@@ -7,6 +7,8 @@
 
 using namespace std;
 
+void Print(vector<vector<string>>);
+
 int main(){
     //read in the file
     //run through and seperate data
@@ -39,7 +41,16 @@ int main(){
     }
     for(int i = 0; i < var; i++){                                           //was gonna search threw the artists at position 2 to see if they match
                                                                             //kinda lost on what to do with matching though
-        
+                                                                            //looking at this http://www.cplusplus.com/forum/general/45549/
+                                                                            //for some inspiration on how to find the matching artists
+
     }
     return 0;
+}
+
+void Print(vector<vector<string>>){                                         //use a prinf function so that everything is organized well
+/*Artist: # of songs, total time
+    Album: # of songs, total time
+        track: song time
+        keep going with info till done*/
 }
