@@ -9,19 +9,30 @@ using namespace std;
 
 void Print(vector<vector<string>> album, vector<int> sets);
 int strtoint(string number);
+char underscore = '_' ;
 
 int main(){
     vector<vector<string>> storage;
     string temp;
     vector<string> readin;
     while(cin >> temp){
+        for ( int i = 0 ; i < temp.size() ; i++ ){
+            if ( temp[i] == underscore ){
+            temp[i] = ' ' ;
+            }
+        }
+        
         readin.push_back(temp);
-    }                                                                       //read everything into an initial vector that will store all of the information from the givven file
+        
+            
+    }
+
+                                                                           //read everything into an initial vector that will store all of the information from the givven file
     int var = readin.size()/6;                                              //pull the size of input that you are looking at
     int yeah = 0;                                                           //set a variabel to iterate through the initial vector
     storage.resize(readin.size());                                          //resize the vector to allow you to add all of the needed information into it
     for(int j = 0; j < var; j++){                                           //goes threw each line in the file
-        for(int i = 0; i < 6; i++){                                         //goes through each item in the line 
+        for(int i = 0; i < 6; i++){                                     //goes through each item in the line 
             storage[j].push_back(readin.at(yeah));
             yeah++;
         }
@@ -57,7 +68,7 @@ void Print(vector<vector<string>> album, vector<int> sets){                     
     Album: # of songs, total time
         track: song time
         keep going with info till done*/
-    printf("%s: %d, total time\n        %s: %d, totaltime\n",
+    printf("%s: %d, total time\n        %s: %d, total time\n",
     album[sets.at(0)].at(2).c_str(), sets.size(), album[sets.at(0)].at(3).c_str(), sets.size());
     //print the head part of the album listing
     //we need to make a function that finds the total amount of time in thee file so that can be impemented into the code
