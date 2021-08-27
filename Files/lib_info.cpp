@@ -58,7 +58,7 @@ int main(){
     
 
     int used = 0;
-    for(int i = 0; i < var-1; i++){                                         //was gonna search threw the artists at position 2 to see if they match
+    for(int i = 0; i < var-1; i++){                                         //was gonna search through the artists at position 2 to see if they match
                                                                             //kinda lost on what to do with matching though
                                                                             //looking at this http://www.cplusplus.com/forum/general/45549/
                                                                             //for some inspiration on how to find the matching artists
@@ -82,8 +82,7 @@ int main(){
 
 // End of section I haven't cleaned up yet, the print below is clean
 
-int titleSpacing = 8 ;
-int songSpacing = 16 ;
+char space = ' ' ;
 
 void Print(vector<vector<string>> album, vector<int> sets){
     printf("%s: %d, total time\n %8s: %d, total time\n",
