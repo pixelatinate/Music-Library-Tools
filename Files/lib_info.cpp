@@ -54,30 +54,48 @@ int main(){
 
     // I haven't cleaning this section up yet because it needs more work
 
+    vector<int> usedlisting;
     vector<int> matchingset;                                                //throw set of matching into it and then print out
     vector<vector<string>> Albumlisting(readin.size());
     
 
     int used = 0;
     for(int i = 0; i < var-1; i++){                                         //was gonna search through the artists at position 2 to see if they match
+        used = 0;     
+        matchingset.erase(matchingset.begin(), matchingset.end());                      
                                                                             //kinda lost on what to do with matching though
                                                                             //looking at this http://www.cplusplus.com/forum/general/45549/
                                                                             //for some inspiration on how to find the matching artists
         for(int j = 0; j < var; j++){
             if(storage[j].at(2) == storage[i].at(2)){
                 matchingset.push_back(j);
+                usedlisting.push_back(j);
             }                                                               //finds all of the matching ones in the set
         }
+        for(int k = 0; k < (usedlisting.size()-matchingset.size()); k++){
+            for(int m = 0; m < matchingset.size(); m++){
+                if(matchingset.at(m) == usedlisting.at(k)){
+                    //cout << "found same" << endl;
+                    used = 1;
+                }                                   
+            }
+        }
+        if(used==1){
+            continue;
+        }
+        else{
+            Print(storage, matchingset);
+        }
         //TotalTime(storage, matchingset);
-        Print(storage, matchingset);
+        //Print(storage, matchingset);
 
     //this will be so that there is no overlapping files printed more than once or we can just implement a count that might work better but this has errors right now
-       /* for(int m = 0; m < matchingset.size(); m++){
-            storage.erase(storage.begin() + matchingset.at(m));
-        }
-        used =+ matchingset.size();
-        cout << used;
-        storage.shrink_to_fit();*/
+        /*for(int m = 0; m < matchingset.size(); m++){
+            storage[matchingset.at(m)].erase(storage.begin(), storage.end());
+        }*/
+        //used =+ matchingset.size();
+        //cout << used;
+        //storage.shrink_to_fit();
         matchingset.erase(matchingset.begin(), matchingset.end());
     }
     return 0;
@@ -93,7 +111,7 @@ void Print(vector<vector<string>> album, vector<int> sets){
     // * we need to make a function that finds the total amount of time in the file so that can be impemented into the code
     
     for(int i = 0; i < sets.size(); i++){
-        printf("%16c%s: %s %s\n", space, album[sets.at(i)].at(5).c_str(),
+        printf("%16c%s. %s: %s\n", space, album[sets.at(i)].at(5).c_str(),
         album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
     }
 
