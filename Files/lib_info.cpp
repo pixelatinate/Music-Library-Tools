@@ -40,13 +40,13 @@ int main(){
             }                                                               //finds all of the matching ones in the set
         }
         Print(storage, matchingset);
-
-        for(int m = 0; m < matchingset.size(); m++){
+    //this will be so that there is no overlapping files printed more than once or we can just implement a count that might work better but this has errors right now
+       /* for(int m = 0; m < matchingset.size(); m++){
             storage.erase(storage.begin() + matchingset.at(m));
         }
         used =+ matchingset.size();
         cout << used;
-        storage.shrink_to_fit();
+        storage.shrink_to_fit();*/
         matchingset.erase(matchingset.begin(), matchingset.end());
     }
     return 0;
@@ -60,10 +60,11 @@ void Print(vector<vector<string>> album, vector<int> sets){                     
     printf("%s: %d, total time\n        %s: %d, totaltime\n",
     album[sets.at(0)].at(2).c_str(), sets.size(), album[sets.at(0)].at(3).c_str(), sets.size());
     //print the head part of the album listing
+    //we need to make a function that finds the total amount of time in thee file so that can be impemented into the code
     for(int i = 0; i < sets.size(); i++){
         printf("                %s: %s %s\n", album[sets.at(i)].at(5).c_str(),
          album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
-    }
+    }//this needs to be ordered correctly
     //remove the spacing and make it %8 or something. couldn't get it working right now 
 }
 
