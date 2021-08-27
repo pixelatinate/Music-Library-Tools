@@ -1,45 +1,62 @@
-//Author: Swasti Mishra and Katie Nuchols
-//Date: August 24th, 2021
-//Professor: Emrich
+// Project 01: Music Library Tool
+// The goal of this project is to reorganize a music discography file 
+//      into something that's easier to understand. 
+// COSC 302
+// Swasti Mishra and Katie Nuchols
+// Date: August 24th, 2021
+// Professor Emrich
 
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-void Print(vector<vector<string>> album, vector<int> sets);
 int strtoint(string number);
-char underscore = '_' ;
+void Print(vector<vector<string>> album, vector<int> sets);
+// Functions
 
 int main(){
-    vector<vector<string>> storage;
     string temp;
     vector<string> readin;
+    vector<vector<string>> storage;
+    // Variables 
+    
     while(cin >> temp){
         for ( int i = 0 ; i < temp.size() ; i++ ){
-            if ( temp[i] == underscore ){
+            if ( temp[i] == '_' ){
             temp[i] = ' ' ;
             }
         }
-        
-        readin.push_back(temp);
-        
-            
+        readin.push_back(temp);      
     }
+    // Reads all the information into a temporary vector of strings
+    //      using the string variable "temp". Also replaces the underscores
+    //      with spaces right away
 
-                                                                           //read everything into an initial vector that will store all of the information from the givven file
-    int var = readin.size()/6;                                              //pull the size of input that you are looking at
-    int yeah = 0;                                                           //set a variabel to iterate through the initial vector
-    storage.resize(readin.size());                                          //resize the vector to allow you to add all of the needed information into it
-    for(int j = 0; j < var; j++){                                           //goes threw each line in the file
-        for(int i = 0; i < 6; i++){                                     //goes through each item in the line 
-            storage[j].push_back(readin.at(yeah));
-            yeah++;
+    int iterator = 0;
+    int var = readin.size()/6;  // *We need to rename this variable bc it's not apparent what it does from the name alone
+    // Variables
+
+    storage.resize(readin.size());
+    // Resizes our official two-dimensional vector so that there's space for 
+    //      the data we're about to put in  
+
+    for(int j = 0; j < var; j++){
+        for(int i = 0; i < 6; i++){
+            storage[j].push_back(readin.at(iterator));
+            iterator++;
         }
     }
+    // First goes through each line in the file, and then goes through each 
+    //      item in the line, pushes them back into the storage vector, and 
+    //      then iterates
+
+    // I haven't cleaning this section up yet because it needs more work
+
     vector<int> matchingset;                                                //throw set of matching into it and then print out
-    vector<vector<string>> Albumlisting;
-    Albumlisting.resize(readin.size());
+    vector<vector<string>> Albumlisting(readin.size());
+    
+
     int used = 0;
     for(int i = 0; i < var-1; i++){                                         //was gonna search threw the artists at position 2 to see if they match
                                                                             //kinda lost on what to do with matching though
@@ -63,21 +80,28 @@ int main(){
     return 0;
 }
 
-void Print(vector<vector<string>> album, vector<int> sets){                                         //use a prinf function so that everything is organized well
-/*Artist: # of songs, total time
-    Album: # of songs, total time
-        track: song time
-        keep going with info till done*/
-    printf("%s: %d, total time\n        %s: %d, total time\n",
+// End of section I haven't cleaned up yet, the print below is clean
+
+int titleSpacing = 8 ;
+int songSpacing = 16 ;
+
+void Print(vector<vector<string>> album, vector<int> sets){
+    printf("%s: %d, total time\n %8s: %d, total time\n",
     album[sets.at(0)].at(2).c_str(), sets.size(), album[sets.at(0)].at(3).c_str(), sets.size());
-    //print the head part of the album listing
-    //we need to make a function that finds the total amount of time in thee file so that can be impemented into the code
+    // * we need to make a function that finds the total amount of time in the file so that can be impemented into the code
+    
     for(int i = 0; i < sets.size(); i++){
-        printf("                %s: %s %s\n", album[sets.at(i)].at(5).c_str(),
-         album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
-    }//this needs to be ordered correctly
-    //remove the spacing and make it %8 or something. couldn't get it working right now 
+        printf("%16s: %s %s\n", album[sets.at(i)].at(5).c_str(),
+        album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
+    }
+
 }
+// Finally prints the cleaned data
+
+// Artist: # of songs, total time
+//         Album: # of songs, total time
+//                 track: song time
+// it's 8 spaces indented for the album and sixteen for the track
 
 int strtoint(string number){
     int changedvar;
