@@ -13,6 +13,7 @@ using namespace std;
 
 int strtoint(string number);
 void Print(vector<vector<string>> album, vector<int> sets);
+//string TotalTime(vector<vector<string>> album, vector<int> sets);
 // Functions
 
 int main(){
@@ -67,7 +68,9 @@ int main(){
                 matchingset.push_back(j);
             }                                                               //finds all of the matching ones in the set
         }
+        //TotalTime(storage, matchingset);
         Print(storage, matchingset);
+
     //this will be so that there is no overlapping files printed more than once or we can just implement a count that might work better but this has errors right now
        /* for(int m = 0; m < matchingset.size(); m++){
             storage.erase(storage.begin() + matchingset.at(m));
@@ -82,15 +85,15 @@ int main(){
 
 // End of section I haven't cleaned up yet, the print below is clean
 
-char space = ' ' ;
 
 void Print(vector<vector<string>> album, vector<int> sets){
-    printf("%s: %d, total time\n %8s: %d, total time\n",
-    album[sets.at(0)].at(2).c_str(), sets.size(), album[sets.at(0)].at(3).c_str(), sets.size());
+    char space = ' ' ;
+    printf("%s: %d, total time\n %8c%s: %d, total time\n",
+    album[sets.at(0)].at(2).c_str(), sets.size(), space, album[sets.at(0)].at(3).c_str(), sets.size());
     // * we need to make a function that finds the total amount of time in the file so that can be impemented into the code
     
     for(int i = 0; i < sets.size(); i++){
-        printf("%16s: %s %s\n", album[sets.at(i)].at(5).c_str(),
+        printf("%16c%s: %s %s\n", space, album[sets.at(i)].at(5).c_str(),
         album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
     }
 
@@ -106,3 +109,7 @@ int strtoint(string number){
     int changedvar;
     return changedvar; 
 }
+
+/*string TotalTime(vector<vector<string>> album, vector<int> sets){
+
+}*/
