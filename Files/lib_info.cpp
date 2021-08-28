@@ -18,23 +18,110 @@ void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx);
 //string TotalTime(vector<vector<string>> album, vector<int> sets);
 // Functions
 
+
+struct Album {
+    map <int, Song* > songs;
+    string name;
+    int time;
+    int nsongs;
+
+    Album( string name ){
+        this->name = name ;
+        this->time = 0 ;
+        this->nsongs = 0 ;
+    } ;
+};
+
+struct Artist {
+    map <string, Album* > albums;
+    string name;
+    int time;
+    int nsongs;
+    
+    Artist( string name ){
+        this->name = name ;
+        this->time = 0 ;
+        this->nsongs = 0 ;
+    } ;
+};
+
+struct Song { 
+    struct Artist *artist ;
+    string title;
+    int time;  // could also be a string
+    int track;
+
+    Song( string title , int time , int track){
+        this->artist = nullptr ;
+        this->title = title ;
+        this->time = time ;
+        this->track = track ;
+    } ;
+};
+
 int main(){
-    string temp;
-    vector<string> readin;
-    vector<vector<string>> storage;
+//    Countdown 2:25 Coltrane,_John Giant_Steps Jazz 3
+
+    string songTitle ;
+    string songTime ;
+    string artistName ;
+    string albumName ;
+    string songGenre ;
+    int songTrack ;
+
+    map <string, Artist * > NameArtist ;
+    NameArtist::iterator it ;
+    
+    map <int, Song * > NameAlbum ;
+    NameAlbum::iterator itna ;
+    
+    Artist *artist ;
+    Song *song ;
+    Album *album ;
+
+    int minutes, seconds ;
+
     // Variables 
     
-    while(cin >> temp){
-        for ( int i = 0 ; i < temp.size() ; i++ ){
-            if ( temp[i] == '_' ){
-            temp[i] = ' ' ;
-            }
+    while( cin >> songTitle >> songTime >> artistName >> albumName >> songGenre >> songTrack ){
+    
+        // reads in title and replaces underscores with space
+        songTitle = replace( songTitle.begin(), songTitle.end(), '_', ' ');
+        // reads in time data
+        scanf("%i:%i", songTime, minutes, seconds);
+        song = new Song( songTitle, ( minutes * 60 + seconds ), songTrack ) ;
+ 
+        // reads in the Artist name replaces underscores with spaces
+        artistName = replace( artistName.begin(), artistName.end(), '_', ' ');
+        it = NameArtist.find(artistName);
+        
+        // Creates a new artist if the artist name doesn't already exist 
+        if ( it == NameArtist.end()){
+            artist = new Artist(artistName) ;
+            NameArtist[artistName] = artist ;
         }
-        readin.push_back(temp);      
+        else{ 
+            artist = it->second ;
+        }
+        artist->time += song->time ;
+        song->artist = artist ;
+        artist->nsongs++ ;
+
+        albumName = replace( albumName.begin(), albumName.end(), '_', ' ');
+        itna = NameAlbum.find(albumName) ;
+
+        if ( itna == NameAlbum.end()){
+            album = new Album(albumName) ; 
+        }
+        else{
+            album = itna->second ;
+        }
+        artist->albums[albumName] = album ;
+        album->nsongs++ ;
+        album->time += minuts*60+seconds ;
+        album->album[songTrack] = song ;
     }
-    // Reads all the information into a temporary vector of strings
-    //      using the string variable "temp". Also replaces the underscores
-    //      with spaces right away
+    
 
     int iterator = 0;
     int var = readin.size()/6;  // *We need to rename this variable bc it's not apparent what it does from the name alone
