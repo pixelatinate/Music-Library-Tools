@@ -143,16 +143,24 @@ int main( int argc, char *argv[]){
         //figure out how to only print last one
 
     }
+    int Minutes, Seconds;
     for( it = NameArtist.begin() ; it != NameArtist.end()--; ++it) {
-        cout << it->first << ": " << it->second->nsongs << ", "  << it->second->time << "\n";
+        Minutes = (it->second->time / 60);
+        Seconds = (it->second->time)-(Minutes * 60);
+        cout << it->first << ": " << it->second->nsongs << ", ";
+        printf("%d:%02d\n", Minutes, Seconds);
         for( it2 = it->second->albums.begin(); it2 != it->second->albums.end(); ++it2){
             printf("%8c", ' ');
-            cout << it2->first << ": " << it2->second->nsongs << ", "  << it->second->time << endl;
+            cout << it2->first << ": " << it2->second->nsongs << ", ";
+            printf("%d:%02d\n", Minutes, Seconds);
             //for loop to iterate through this part
             
             for( it3 = it2->second->songs.begin(); it3 != it2->second->songs.end(); ++it3){
                 printf("%16c", ' ');
-                cout << it3->second->track << ". " << it3->second->title << ": " << it3->second->time << endl;
+                Minutes = (it3->second->time / 60);
+                Seconds = (it3->second->time)-(Minutes * 60);
+                cout << it3->second->track << ". " << it3->second->title << ": ";
+                printf("%d:%02d\n", Minutes, Seconds);
             }
         }
     }
