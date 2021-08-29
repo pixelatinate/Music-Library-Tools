@@ -118,17 +118,12 @@ int main( int argc, char *argv[]){
         song->artist = artist ;
         artist->nsongs++ ;
 
-        //katie added
-        //song->title = artist;
-
-        //katie added
-
         // Reads in the Album name and replaces underscores with spaces
         replace( albumName.begin(), albumName.end(), '_', ' ');
         it2 = NameAlbum.find(albumName) ;
 
         // might not be necessary 
-        if ( it2 == NameAlbum.end()){
+        if ( (it2 == NameAlbum.end()) || (it == NameArtist.end()) ){
             album = new Album(albumName) ;
             NameAlbum[albumName] = album;
         }
@@ -151,6 +146,8 @@ int main( int argc, char *argv[]){
         printf("%d:%02d\n", Minutes, Seconds);
         for( it2 = it->second->albums.begin(); it2 != it->second->albums.end(); ++it2){
             printf("%8c", ' ');
+            Minutes = (it2->second->time / 60);
+            Seconds = (it2->second->time)-(Minutes * 60);
             cout << it2->first << ": " << it2->second->nsongs << ", ";
             printf("%d:%02d\n", Minutes, Seconds);
             //for loop to iterate through this part
