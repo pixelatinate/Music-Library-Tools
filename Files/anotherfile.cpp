@@ -11,6 +11,7 @@
 # include <string>
 # include <algorithm>
 # include <map>
+# include <fstream>
 
 using namespace std;
 
@@ -58,7 +59,7 @@ struct Artist {
     } ;
 };
 
-int main(){
+int main( int argc, char *argv[]){
 
     // Variables 
     // This set of variables reads in the data from each line of text
@@ -84,6 +85,9 @@ int main(){
     // These two are used for calculation of song time
     int minutes, seconds ;
 
+//    ifstream file ;
+//    file.open( argv[1] ) 
+
     // Reads in from the line of data
     while( cin >> songTitle >> songTime >> artistName >> albumName >> songGenre >> songTrack ){
     
@@ -91,7 +95,7 @@ int main(){
         replace( songTitle.begin(), songTitle.end(), '_', ' ' ) ;
         
         // Reads in time data and calculates the length of a song
-        scanf("%d:%d", songTime, minutes, seconds);
+        sscanf(songTime.c_str() , "%d:%d", &minutes, &seconds);
         song = new Song( songTitle, ( minutes * 60 + seconds ), songTrack ) ;
 
         // Reads in the Artist name and replaces underscores with spaces
@@ -119,6 +123,7 @@ int main(){
         replace( albumName.begin(), albumName.end(), '_', ' ');
         itna = NameAlbum.find(albumName) ;
 
+        // might not be necessary 
         if ( itna == NameAlbum.end()){
             album = new Album(albumName) ;
             NameAlbum[albumName] = album;
@@ -128,32 +133,25 @@ int main(){
         }
         artist->albums[albumName] = album ;
         album->nsongs++ ;
-        album->time += ( minutes*60+seconds );
+        album->time += ( minutes * 60 + seconds );
         album->songs[songTrack] = song ;
 
         //figure out how to only print last one
 
 
     }
-    for( it = NameArtist.begin() ; it != NameArtist.end()--; it++) {
+    for( it = NameArtist.begin() ; it != NameArtist.end()--; ++it) {
         cout << it->first << ": " << it->second->nsongs << ", "  << it->second->time << "\n";
-        for( itna = it->second->albums.begin(); itna != it->second->albums.end(); itna++){
+        for( itna = it->second->albums.begin(); itna != it->second->albums.end(); ++itna){
             printf("%8c", ' ');
             cout << itna->first << ": " << itna->second->nsongs << ", "  << it->second->time << endl;
             //for loop to iterate through this part
             printf("%16c", ' ');
-            cout << "it->second->songs[tr]" << endl;
+            cout << "it->second->songs[track]" << endl;
         }
     }
     return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
 
 void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
   /*  char space = ' ' ;
