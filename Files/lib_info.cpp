@@ -6,44 +6,17 @@
 // Date: August 24th, 2021
 // Professor Emrich
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
+# include <iostream>
+# include <vector>
+# include <string>
+# include <algorithm>
+# include <map>
 
 using namespace std;
 
-int strtoint(string number);
-void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx);
+//void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx);
 //string TotalTime(vector<vector<string>> album, vector<int> sets);
 // Functions
-
-
-struct Album {
-    map <int, Song* > songs;
-    string name;
-    int time;
-    int nsongs;
-
-    Album( string name ){
-        this->name = name ;
-        this->time = 0 ;
-        this->nsongs = 0 ;
-    } ;
-};
-
-struct Artist {
-    map <string, Album* > albums;
-    string name;
-    int time;
-    int nsongs;
-    
-    Artist( string name ){
-        this->name = name ;
-        this->time = 0 ;
-        this->nsongs = 0 ;
-    } ;
-};
 
 struct Song { 
     struct Artist *artist ;
@@ -59,9 +32,36 @@ struct Song {
     } ;
 };
 
-int main(){
-//    Countdown 2:25 Coltrane,_John Giant_Steps Jazz 3
+struct Album {
+    map <int, Song* > songs ;
+    string name ;
+    int time ;
+    int nsongs ;
 
+    Album( string name ){
+        this->name = name ;
+        this->time = 0 ;
+        this->nsongs = 0 ;
+    } ;
+} ;
+
+struct Artist {
+    map <string, Album* > albums;
+    string name;
+    int time;
+    int nsongs;
+    
+    Artist( string name ){
+        this->name = name ;
+        this->time = 0 ;
+        this->nsongs = 0 ;
+    } ;
+};
+
+int main(){
+
+    // Variables 
+    // This set of variables reads in the data from each line of text
     string songTitle ;
     string songTime ;
     string artistName ;
@@ -69,30 +69,33 @@ int main(){
     string songGenre ;
     int songTrack ;
 
-    map <string, Artist * > NameArtist ;
-    NameArtist::iterator it ;
+    // This set of variables names iterators for the first map
+    map <string, Artist* > NameArtist ;
+    map <string, Artist* >::iterator it ;
+    // This set of variables names iterators for the second map
+    map <int, Song* > NameAlbum ;
+    map <int, Song* >::iterator itna ;
     
-    map <int, Song * > NameAlbum ;
-    NameAlbum::iterator itna ;
-    
+    // This set of variables declares pointers
     Artist *artist ;
     Song *song ;
     Album *album ;
 
+    // These two are used for calculation of song time
     int minutes, seconds ;
 
-    // Variables 
-    
+    // Reads in from the line of data
     while( cin >> songTitle >> songTime >> artistName >> albumName >> songGenre >> songTrack ){
     
-        // reads in title and replaces underscores with space
-        songTitle = replace( songTitle.begin(), songTitle.end(), '_', ' ');
-        // reads in time data
+        // Reads in title and replaces underscores with space
+        replace( songTitle.begin(), songTitle.end(), '_', ' ' ) ;
+        
+        // Reads in time data and calculates the length of a song
         scanf("%i:%i", songTime, minutes, seconds);
         song = new Song( songTitle, ( minutes * 60 + seconds ), songTrack ) ;
  
-        // reads in the Artist name replaces underscores with spaces
-        artistName = replace( artistName.begin(), artistName.end(), '_', ' ');
+        // Reads in the Artist name and replaces underscores with spaces
+        replace( artistName.begin(), artistName.end(), '_', ' ' ) ;
         it = NameArtist.find(artistName);
         
         // Creates a new artist if the artist name doesn't already exist 
@@ -107,105 +110,25 @@ int main(){
         song->artist = artist ;
         artist->nsongs++ ;
 
-        albumName = replace( albumName.begin(), albumName.end(), '_', ' ');
-        itna = NameAlbum.find(albumName) ;
+        // Reads in the Album name and replaces underscores with spaces
+        replace( albumName.begin(), albumName.end(), '_', ' ');
+//        itna = NameAlbum.find(albumName) ;
 
         if ( itna == NameAlbum.end()){
             album = new Album(albumName) ; 
         }
         else{
-            album = itna->second ;
+//            album = itna->second ;
         }
         artist->albums[albumName] = album ;
         album->nsongs++ ;
-        album->time += minuts*60+seconds ;
-        album->album[songTrack] = song ;
+        album->time += ( minutes*60+seconds );
+//        album->album[songTrack] = song ;
     }
-    
-
-    int iterator = 0;
-    int var = readin.size()/6;  // *We need to rename this variable bc it's not apparent what it does from the name alone
-    // Variables
-
-    storage.resize(readin.size());
-    // Resizes our official two-dimensional vector so that there's space for 
-    //      the data we're about to put in  
-
-    for(int j = 0; j < var; j++){
-        for(int i = 0; i < 6; i++){
-            storage[j].push_back(readin.at(iterator));
-            iterator++;
-        }
-    }
-    // First goes through each line in the file, and then goes through each 
-    //      item in the line, pushes them back into the storage vector, and 
-    //      then iterates
-
-    // I haven't cleaning this section up yet because it needs more work
-
-    vector<int> usedlisting;
-    vector<int> matchingset;
-    vector<int> matchsetartist ;
-    vector<int> matchsetalbum ;                                                //throw set of matching into it and then print out
-    vector<vector<string>> Albumlisting(readin.size());
-    vector<string> temporary ;
-    
-
-    int used = 0;
-    for(int i = 0; i < var-1; i++){                                         //was gonna search through the artists at position 2 to see if they match
-        used = 0;     
-        matchingset.erase(matchingset.begin(), matchingset.end()); 
-        matchsetalbum.erase(matchsetalbum.begin(), matchsetalbum.end());
-                             
-                                                                            //kinda lost on what to do with matching though
-                                                                            //looking at this http://www.cplusplus.com/forum/general/45549/
-                                                                            //for some inspiration on how to find the matching artists
-        for(int j = 0; j < var; j++){
-            if(storage[j].at(2) == storage[i].at(2)){
-                matchingset.push_back(j);
-                usedlisting.push_back(j);
-            }
-            if(storage[j].at(3) == storage[i].at(3)){
-                matchsetalbum.push_back(j);
-
-            }                                                               //finds all of the matching ones in the set
-        }
-        for(int k = 0; k < (usedlisting.size()-matchingset.size()); k++){
-            for(int m = 0; m < matchingset.size(); m++){
-                if(matchingset.at(m) == usedlisting.at(k)){
-                    used = 1;
-                }                                   
-            }
-        }
-        
-        if(used==1){
-            continue;
-        }
-        
-        else{
-            Print(storage, matchingset, matchsetalbum);
-        }
-        //TotalTime(storage, matchingset);
-        //Print(storage, matchingset);
-
-    //this will be so that there is no overlapping files printed more than once or we can just implement a count that might work better but this has errors right now
-        /*for(int m = 0; m < matchingset.size(); m++){
-            storage[matchingset.at(m)].erase(storage.begin(), storage.end());
-        }*/
-        //used =+ matchingset.size();
-        //cout << used;
-        //storage.shrink_to_fit();
-        
-        matchingset.erase(matchingset.begin(), matchingset.end());
-        matchsetalbum.erase(matchsetalbum.begin(), matchsetalbum.end());
-        
-    }
-    return 0;
 }
 
-// End of section I haven't cleaned up yet, the print below is clean
 
-
+    
 void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
     char space = ' ' ;
     printf("%s: %d, total time\n",
@@ -239,12 +162,3 @@ void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
 //         Album: # of songs, total time
 //                 track: song time
 // it's 8 spaces indented for the album and sixteen for the track
-
-int strtoint(string number){
-    int changedvar;
-    return changedvar; 
-}
-
-/*string TotalTime(vector<vector<string>> album, vector<int> sets){
-
-}*/
