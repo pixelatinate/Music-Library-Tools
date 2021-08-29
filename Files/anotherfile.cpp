@@ -73,8 +73,8 @@ int main(){
     map <string, Artist* > NameArtist ;
     map <string, Artist* >::iterator it ;
     // This set of variables names iterators for the second map
-    map <int, Song* > NameAlbum ;
-    map <int, Song* >::iterator itna ;
+    map <string, Album* > NameAlbum ;
+    map <string, Album* >::iterator itna ;
     
     // This set of variables declares pointers
     Artist *artist ;
@@ -91,9 +91,9 @@ int main(){
         replace( songTitle.begin(), songTitle.end(), '_', ' ' ) ;
         
         // Reads in time data and calculates the length of a song
-        scanf("%i:%i", songTime, minutes, seconds);
+        scanf("%d:%d", songTime, minutes, seconds);
         song = new Song( songTitle, ( minutes * 60 + seconds ), songTrack ) ;
- 
+
         // Reads in the Artist name and replaces underscores with spaces
         replace( artistName.begin(), artistName.end(), '_', ' ' ) ;
         it = NameArtist.find(artistName);
@@ -103,7 +103,7 @@ int main(){
             artist = new Artist(artistName) ;
             NameArtist[artistName] = artist ;
         }
-        else{  
+        else{ 
             artist = it->second ;
         }
         artist->time += song->time ;
@@ -112,25 +112,35 @@ int main(){
 
         // Reads in the Album name and replaces underscores with spaces
         replace( albumName.begin(), albumName.end(), '_', ' ');
-//        itna = NameAlbum.find(albumName) ;
+        itna = NameAlbum.find(albumName) ;
 
         if ( itna == NameAlbum.end()){
-            album = new Album(albumName) ; 
+            album = new Album(albumName) ;
+            NameAlbum[albumName] = album;
         }
         else{
-//            album = itna->second ;
+            album = itna->second ;
         }
         artist->albums[albumName] = album ;
         album->nsongs++ ;
         album->time += ( minutes*60+seconds );
-//        album->album[songTrack] = song ;
+        album->songs[songTrack] = song ;
+
+        //figure out how to only print last one
+        for( it = NameArtist.begin() ; it != NameArtist.end(); it++) {
+            cout << it->first << ": " << it->second->nsongs << ", ";
+            for( itna = it->second->albums.begin(); itna != it->second->albums.end(); itna++){
+                cout << " " << itna->first << ": " << itna->second->nsongs << ", "  << endl;
+            }
+        }
+
     }
 }
 
 
     
 void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
-    char space = ' ' ;
+  /*  char space = ' ' ;
     printf("%s: %d, total time\n",
     album[sets.at(0)].at(2).c_str(), sets.size()) ;
     
@@ -154,7 +164,7 @@ void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
         album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
         
     }
-
+*/
 }
 // Finally prints the cleaned data
 
