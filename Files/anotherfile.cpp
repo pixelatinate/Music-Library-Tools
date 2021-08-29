@@ -110,6 +110,11 @@ int main(){
         song->artist = artist ;
         artist->nsongs++ ;
 
+        //katie added
+        //song->title = artist;
+
+        //katie added
+
         // Reads in the Album name and replaces underscores with spaces
         replace( albumName.begin(), albumName.end(), '_', ' ');
         itna = NameAlbum.find(albumName) ;
@@ -127,18 +132,29 @@ int main(){
         album->songs[songTrack] = song ;
 
         //figure out how to only print last one
-        for( it = NameArtist.begin() ; it != NameArtist.end(); it++) {
-            cout << it->first << ": " << it->second->nsongs << ", ";
-            for( itna = it->second->albums.begin(); itna != it->second->albums.end(); itna++){
-                cout << " " << itna->first << ": " << itna->second->nsongs << ", "  << endl;
-            }
-        }
+
 
     }
+    for( it = NameArtist.begin() ; it != NameArtist.end()--; it++) {
+        cout << it->first << ": " << it->second->nsongs << ", "  << it->second->time << "\n";
+        for( itna = it->second->albums.begin(); itna != it->second->albums.end(); itna++){
+            printf("%8c", ' ');
+            cout << itna->first << ": " << itna->second->nsongs << ", "  << it->second->time << endl;
+            //for loop to iterate through this part
+            printf("%16c", ' ');
+            cout << "it->second->songs[tr]" << endl;
+        }
+    }
+    return EXIT_SUCCESS;
 }
 
 
-    
+
+
+
+
+
+
 void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
   /*  char space = ' ' ;
     printf("%s: %d, total time\n",
