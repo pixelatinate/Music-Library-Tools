@@ -11,6 +11,8 @@
 # include <string>
 # include <algorithm>
 # include <map>
+# include <fstream>
+# include <sstream>
 
 using namespace std;
 
@@ -58,7 +60,7 @@ struct Artist {
     } ;
 };
 
-int main(){
+int main( int argc, char *argv[]){
 
     // Variables 
     // This set of variables reads in the data from each line of text
@@ -73,8 +75,11 @@ int main(){
     map <string, Artist* > NameArtist ;
     map <string, Artist* >::iterator it ;
     // This set of variables names iterators for the second map
-    map <int, Song* > NameAlbum ;
-    map <int, Song* >::iterator itna ;
+    map <string, Album* > NameAlbum ;
+    map <string, Album* >::iterator it2 ;
+
+    map <string, Song* > NameSong ;
+    map <int, Song* >::iterator it3 ;
     
     // This set of variables declares pointers
     Artist *artist ;
@@ -84,16 +89,19 @@ int main(){
     // These two are used for calculation of song time
     int minutes, seconds ;
 
+    ifstream file ;
+    file.open( argv[1] ) ;
+
     // Reads in from the line of data
-    while( cin >> songTitle >> songTime >> artistName >> albumName >> songGenre >> songTrack ){
+    while( file >> songTitle >> songTime >> artistName >> albumName >> songGenre >> songTrack ){
     
         // Reads in title and replaces underscores with space
         replace( songTitle.begin(), songTitle.end(), '_', ' ' ) ;
         
         // Reads in time data and calculates the length of a song
-        scanf("%i:%i", songTime, minutes, seconds);
+        sscanf(songTime.c_str() , "%d:%d", &minutes, &seconds);
         song = new Song( songTitle, ( minutes * 60 + seconds ), songTrack ) ;
- 
+
         // Reads in the Artist name and replaces underscores with spaces
         replace( artistName.begin(), artistName.end(), '_', ' ' ) ;
         it = NameArtist.find(artistName);
@@ -103,60 +111,53 @@ int main(){
             artist = new Artist(artistName) ;
             NameArtist[artistName] = artist ;
         }
-        else{  
+        else{ 
             artist = it->second ;
         }
         artist->time += song->time ;
         song->artist = artist ;
         artist->nsongs++ ;
 
+        //katie added
+        //song->title = artist;
+
+        //katie added
+
         // Reads in the Album name and replaces underscores with spaces
         replace( albumName.begin(), albumName.end(), '_', ' ');
-//        itna = NameAlbum.find(albumName) ;
+        it2 = NameAlbum.find(albumName) ;
 
-        if ( itna == NameAlbum.end()){
-            album = new Album(albumName) ; 
+        // might not be necessary 
+        if ( it2 == NameAlbum.end()){
+            album = new Album(albumName) ;
+            NameAlbum[albumName] = album;
         }
         else{
-//            album = itna->second ;
+            album = it2->second ;
         }
         artist->albums[albumName] = album ;
         album->nsongs++ ;
-        album->time += ( minutes*60+seconds );
-//        album->album[songTrack] = song ;
+        album->time += ( minutes * 60 + seconds );
+        album->songs[songTrack] = song ;
+
+        //figure out how to only print last one
+
     }
-}
-
-
-    
-void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx){
-    char space = ' ' ;
-    printf("%s: %d, total time\n",
-    album[sets.at(0)].at(2).c_str(), sets.size()) ;
-    
-    for ( int j = 0 ; j < albumx.size()-1 ; j++){
-        if ( album[sets.at(j)].at(3) == album[sets.at(j+1) ].at(3) ){
-            continue ;
+    for( it = NameArtist.begin() ; it != NameArtist.end()--; ++it) {
+        cout << it->first << ": " << it->second->nsongs << ", "  << it->second->time << "\n";
+        for( it2 = it->second->albums.begin(); it2 != it->second->albums.end(); ++it2){
+            printf("%8c", ' ');
+            cout << it2->first << ": " << it2->second->nsongs << ", "  << it->second->time << endl;
+            //for loop to iterate through this part
+            
+            for( it3 = it2->second->songs.begin(); it3 != it2->second->songs.end(); ++it3){
+                printf("%16c", ' ');
+                cout << it3->second->track << ". " << it3->second->title << ": " << it3->second->time << endl;
+            }
         }
-        else{
-            printf("%8c%s: %d, total time\n" , space, album[sets.at(j+1)].at(3).c_str(), sets.size());  
-            printf("%16c%s. %s: %s\n", space, album[sets.at(j+1)].at(5).c_str(),
-                    album[sets.at(j+1)].at(0).c_str(), album[sets.at(j+1)].at(1).c_str());  
-        }
-
     }
-    printf("%8c%s: %d, total time\n" , space, album[sets.at(0)].at(3).c_str(), sets.size());
-
-    // * we need to make a function that finds the total amount of time in the file so that can be impemented into the code
-    
-    for(int i = 0; i < sets.size(); i++){
-        printf("%16c%s. %s: %s\n", space, album[sets.at(i)].at(5).c_str(),
-        album[sets.at(i)].at(0).c_str(), album[sets.at(i)].at(1).c_str());
-        
-    }
-
+    return EXIT_SUCCESS;
 }
-// Finally prints the cleaned data
 
 // Artist: # of songs, total time
 //         Album: # of songs, total time
