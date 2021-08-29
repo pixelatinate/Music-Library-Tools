@@ -2,44 +2,47 @@
 // The goal of this project is to reorganize a music discography file 
 //      into something that's easier to understand. 
 // COSC 302
-// Swasti Mishra and Katie Nuchols
+// Swasti Mishra and Katie Nuchols. Clark Hathaway helped walk us through setting
+//      up the map as well. Also, James Plank wrote the lab, Scott Emrich adapted 
+//      it for our class, and Ashley Babjac ran our lab section. 
 // Date: August 24th, 2021
 // Professor Emrich
 
-# include <iostream>
-# include <vector>
-# include <string>
-# include <algorithm>
+// Libraries 
 # include <map>
+# include <string>
 # include <fstream>
 # include <sstream>
+# include <iostream>
+# include <algorithm>
 
 using namespace std;
 
-//void Print(vector<vector<string>> album, vector<int> sets, vector<int> albumx);
-//string TotalTime(vector<vector<string>> album, vector<int> sets);
-// Functions
-
+// Contains all the song data
 struct Song { 
-    struct Artist *artist ;
-    string title;
-    int time;  // could also be a string
-    int track;
+    string title ;
+    int time ;
+    int track ;
 
+    // Constructor for the song structure
     Song( string title , int time , int track){
-        this->artist = nullptr ;
         this->title = title ;
         this->time = time ;
         this->track = track ;
     } ;
-};
+} ;
 
+struct Artist ;
+
+// Contains all the album data
 struct Album {
     map <int, Song* > songs ;
+    map<string, Artist* > artist ;
     string name ;
     int time ;
     int nsongs ;
 
+    // Constructor for the album structure
     Album( string name ){
         this->name = name ;
         this->time = 0 ;
@@ -47,12 +50,14 @@ struct Album {
     } ;
 } ;
 
+// Contains all the artist data
 struct Artist {
     map <string, Album* > albums;
     string name;
     int time;
     int nsongs;
     
+    // Constructor for the artist structure
     Artist( string name ){
         this->name = name ;
         this->time = 0 ;
@@ -75,10 +80,8 @@ int main( int argc, char *argv[]){
     map <string, Artist* > NameArtist ;
     map <string, Artist* >::iterator it ;
     // This set of variables names iterators for the second map
-    map <string, Album* > NameAlbum ;
     map <string, Album* >::iterator it2 ;
-
-    map <string, Song* > NameSong ;
+    // This set of variables names iterators for the last map
     map <int, Song* >::iterator it3 ;
     
     // This set of variables declares pointers
@@ -89,6 +92,7 @@ int main( int argc, char *argv[]){
     // These two are used for calculation of song time
     int minutes, seconds ;
 
+    // Opens the file
     ifstream file ;
     file.open( argv[1] ) ;
 
@@ -107,7 +111,7 @@ int main( int argc, char *argv[]){
         it = NameArtist.find(artistName);
         
         // Creates a new artist if the artist name doesn't already exist 
-        if ( it == NameArtist.end()){
+        if ( it == NameArtist.end() ){
             artist = new Artist(artistName) ;
             NameArtist[artistName] = artist ;
         }
@@ -115,30 +119,33 @@ int main( int argc, char *argv[]){
             artist = it->second ;
         }
         artist->time += song->time ;
-        song->artist = artist ;
         artist->nsongs++ ;
 
         // Reads in the Album name and replaces underscores with spaces
         replace( albumName.begin(), albumName.end(), '_', ' ');
-        it2 = NameAlbum.find(albumName) ;
+        it2 = artist->albums.find(albumName) ;
 
-        // might not be necessary 
-        if ( (it2 == NameAlbum.end()) || (it == NameArtist.end()) ){
+        // Reads in the album and checks if the album (with the correct artist!) already exists
+        if ( artist->albums.find(albumName) == artist->albums.end() ) {
             album = new Album(albumName) ;
-            NameAlbum[albumName] = album;
+            artist->albums[albumName] = album ;    
         }
         else{
             album = it2->second ;
         }
         artist->albums[albumName] = album ;
         album->nsongs++ ;
-        album->time += ( minutes * 60 + seconds );
+        album->time += ( minutes * 60 + seconds ) ;
         album->songs[songTrack] = song ;
+        album->artist[artistName] = artist ;
 
-        //figure out how to only print last one
+    } 
+    file.close() ;
 
-    }
+    // Used to reorganize the time and print
     int Minutes, Seconds;
+
+    // Prints the completed, organized data
     for( it = NameArtist.begin() ; it != NameArtist.end()--; ++it) {
         Minutes = (it->second->time / 60);
         Seconds = (it->second->time)-(Minutes * 60);
@@ -149,9 +156,7 @@ int main( int argc, char *argv[]){
             Minutes = (it2->second->time / 60);
             Seconds = (it2->second->time)-(Minutes * 60);
             cout << it2->first << ": " << it2->second->nsongs << ", ";
-            printf("%d:%02d\n", Minutes, Seconds);
-            //for loop to iterate through this part
-            
+            printf("%d:%02d\n", Minutes, Seconds);    
             for( it3 = it2->second->songs.begin(); it3 != it2->second->songs.end(); ++it3){
                 printf("%16c", ' ');
                 Minutes = (it3->second->time / 60);
@@ -163,8 +168,3 @@ int main( int argc, char *argv[]){
     }
     return EXIT_SUCCESS;
 }
-
-// Artist: # of songs, total time
-//         Album: # of songs, total time
-//                 track: song time
-// it's 8 spaces indented for the album and sixteen for the track
