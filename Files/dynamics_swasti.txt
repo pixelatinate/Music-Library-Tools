@@ -1,0 +1,20 @@
+My Name/Github Handle:           Swasti Mishra / pixelatinate
+My Partner's Name/Github Handle: Katie Nuchols / Knuchols
+
+Link to this repository: https://github.com/pixelatinate/Music-Library-Tools
+
+    To be honest, I did significantly more of this project than Katie did. This
+happened bc Katie didn't read the documentation as thoroughly as she should have, 
+and we wasted a lot of time this week trying to write this problem with vectors. 
+As a result, come Saturday it was really us realizing that we had hit a wall on 
+what vectors are capable of, so I had to reach out to Clark Hathway to re-teach 
+me about maps which meant I wrote, debugged, and rewrote most of this code on my
+own. 
+    What I will say is that Katie wrote the time recalculation section in the
+print function. She also wrote some of the print function the night of Aug 28, 
+so that when I woke up the next morning I could tell how much of our program was 
+working. This did a lot to contribute to the positive attitude I took towards this
+code for the rest of the day, which I think is pretty significant. 
+
+The compile command is also included in the README, but here it is:
+g++ -g -Wall -std=gnu++11 -o lib_info lib_info.cpp             
