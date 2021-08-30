@@ -1,3 +1,8 @@
+My Name/Github Handle:           Katie Nuchols / Knuchols
+My Partner's Name/Github Handle: Swasti Mishra / pixelatinate
+
+Link to this repository: https://github.com/pixelatinate/Music-Library-Tools
+
 In this group I think we had a bit of communication issues in the beginning. 
 We were not clear on the direction we wanted to take the code and it caused issues
  later on. But in the end we were able to find what worked well. We each would keep
